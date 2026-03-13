@@ -6,8 +6,8 @@
 <script>
   const params = new URLSearchParams(window.location.search);
   const empName = params.get("name") || "";
-  let url = "https://script.google.com/macros/s/AKfycbxYefMv3K6_bqp2AZZOpq4u2jel2cBKWxf-uYu-82AU6ceFJUNz1-n27ebwbCNHomip7g/exec";
-            
+  let url = "https://script.google.com/macros/s/AKfycbymqG1Smj0rwQopVpYSZp2IlavQ9o1Nu4BAOgiR0Wk_-sk1a8voIYZySCwdrNGUMk2J0A/exec";
+
   if (empName) {
     url += "?name=" + encodeURIComponent(empName);
   }
