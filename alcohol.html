@@ -3,19 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <title>アルコールチェック</title>
+
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const empName = params.get("name") || "";
-  let url = "https://script.google.com/macros/s/AKfycbymqG1Smj0rwQopVpYSZp2IlavQ9o1Nu4BAOgiR0Wk_-sk1a8voIYZySCwdrNGUMk2J0A/exec";
 
-  if (empName) {
-    url += "?name=" + encodeURIComponent(empName);
-  }
+const params = new URLSearchParams(window.location.search);
+const empName = params.get("name") || "";
 
-  location.replace(url);
+let url = "https://script.google.com/macros/s/AKfycbwJot5jghyQZCyaWCWPCJQg2DqFYVahX5_NPwjPLBFymi1ye05UGTOt1NxlFh5uzKmBLA/exec";
+
+if(empName){
+  url += "?name=" + encodeURIComponent(empName);
+}
+
+location.replace(url);
+
 </script>
+
 </head>
+
 <body>
+
 移動中...
+
 </body>
 </html>
