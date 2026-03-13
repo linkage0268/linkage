@@ -7,9 +7,9 @@
 const params = new URLSearchParams(window.location.search);
 const empName = params.get("name") || "";
 
-let url = "https://script.google.com/macros/s/AKfycbwJot5jghyQZCyaWCWPCJQg2DqFYVahX5_NPwjPLBFymi1ye05UGTOt1NxlFh5uzKmBLA/exec";
+let url = "https://script.google.com/macros/s/AKfycbyJs-hvVrm85yHQLmuBAOYGZ6dz13A1ThOAhAUWz2CwL59owwHQyntBpDuzd18SpoI6lA/exec";
 
-if(empName){
+if (empName) {
   url += "?name=" + encodeURIComponent(empName);
 }
 
