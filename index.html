@@ -12,7 +12,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="theme-color" content="#dfe7f2">
 
-  <!-- ホーム画面アイコン -->
   <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
 
@@ -65,6 +64,24 @@
       font-size: 30px;
       font-weight: 800;
       letter-spacing: 0.2px;
+    }
+
+    .sub {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .name-box {
+      margin-top: 14px;
+      background: #eff6ff;
+      border: 1px solid #dbeafe;
+      color: #1d4ed8;
+      border-radius: 18px;
+      padding: 12px 14px;
+      font-size: 16px;
+      font-weight: 800;
+      display: none;
     }
 
     .card {
@@ -131,6 +148,8 @@
     <div class="logo-wrap">
       <img class="logo" src="icon.png" alt="Linkage">
       <h1>Linkage</h1>
+      <div class="sub">スマホメニュー</div>
+      <div id="nameBox" class="name-box"></div>
     </div>
 
     <div class="card">
@@ -151,14 +170,30 @@
   </div>
 
   <script>
+    const params = new URLSearchParams(window.location.search);
+    const empName = params.get("name") || "";
+
     function goMain() {
-location.href = "alcohol.html"
-}
+      let url = "alcohol.html";
+      if (empName) {
+        url += "?name=" + encodeURIComponent(empName);
+      }
+      location.href = url;
+    }
 
     function goForm() {
-location.href = "apply.html"
-}
+      location.href = "apply.html";
+    }
+
+    function initNameBox() {
+      const box = document.getElementById("nameBox");
+      if (empName) {
+        box.style.display = "block";
+        box.textContent = empName + " さんでログイン中";
+      }
+    }
+
+    initNameBox();
   </script>
 </body>
 </html>
-
