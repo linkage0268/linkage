@@ -3,7 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>アルコールチェック</title>
-<meta http-equiv="refresh" content="0; url=https://script.google.com/macros/s/AKfycbwxR_jsTZdg8e9q3fWMC-wVuupGeuhafotVDH1GR_VLzHA5NZBnXjpZsedJ7hchxSkpiA/exec">
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const empName = params.get("name") || "";
+  let url = "https://script.google.com/macros/s/AKfycbwxR_jsTZdg8e9q3fWMC-wVuupGeuhafotVDH1GR_VLzHA5NZBnXjpZsedJ7hchxSkpiA/exec";
+
+  if (empName) {
+    url += "?name=" + encodeURIComponent(empName);
+  }
+
+  location.replace(url);
+</script>
 </head>
 <body>
 移動中...
