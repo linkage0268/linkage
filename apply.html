@@ -7,7 +7,7 @@
 const params = new URLSearchParams(window.location.search);
 const staff = params.get("staff") || "";
 
-let url = "ここに応募フォーム用GASのURLを入れる";
+let url = "https://script.google.com/macros/s/AKfycbwgzqZmEun_FeNpe9CeML9oC2Ov1nIdXfqMMrLy3ts6A5h0C4kvXL1LYAYFBjczwA9T/exec";
 
 if (staff) {
   url += "?staff=" + encodeURIComponent(staff);
@@ -20,4 +20,3 @@ location.replace(url);
 移動中...
 </body>
 </html>
-
