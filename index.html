@@ -1,199 +1,149 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="UTF-8">
 
-  <title>Linkage</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Linkage">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="theme-color" content="#dfe7f2">
+<title>Linkage</title>
 
-  <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Linkage">
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-      background: #dfe7f2;
-      color: #111827;
-    }
+<style>
 
-    body {
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding:
-        calc(env(safe-area-inset-top) + 28px)
-        18px
-        calc(env(safe-area-inset-bottom) + 28px);
-    }
+body{
+margin:0;
+font-family:sans-serif;
+background:#eef3fb;
+text-align:center;
+}
 
-    .app {
-      width: 100%;
-      max-width: 430px;
-      text-align: center;
-    }
+.header{
+padding:40px 20px 10px;
+}
 
-    .logo-wrap {
-      margin-bottom: 18px;
-    }
+.logo{
+width:120px;
+height:120px;
+object-fit:contain;
+display:block;
+margin:auto;
+}
 
-    .logo {
-      width: 104px;
-      height: 104px;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto 12px;
-      border-radius: 24px;
-    }
+.title{
+font-size:36px;
+font-weight:bold;
+margin-top:10px;
+}
 
-    h1 {
-      margin: 0;
-      font-size: 30px;
-      font-weight: 800;
-      letter-spacing: 0.2px;
-    }
+.sub{
+color:#666;
+margin-bottom:20px;
+}
 
-    .sub {
-      margin-top: 8px;
-      font-size: 14px;
-      color: #6b7280;
-    }
+.panel{
+background:white;
+border-radius:25px;
+padding:25px;
+max-width:480px;
+margin:auto;
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
 
-    .name-box {
-      margin-top: 14px;
-      background: #eff6ff;
-      border: 1px solid #dbeafe;
-      color: #1d4ed8;
-      border-radius: 18px;
-      padding: 12px 14px;
-      font-size: 16px;
-      font-weight: 800;
-      display: none;
-    }
+.menu{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
 
-    .card {
-      margin-top: 18px;
-      background: #ffffff;
-      border-radius: 28px;
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
-    }
+button{
+width:100%;
+height:65px;
+border:none;
+border-radius:18px;
+font-size:20px;
+font-weight:bold;
+color:white;
+cursor:pointer;
+}
 
-    .menu {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+.alcohol{
+background:linear-gradient(180deg,#4e8cff,#2f6df6);
+}
 
-    .btn {
-      width: 100%;
-      min-height: 74px;
-      border: none;
-      border-radius: 20px;
-      font-size: 19px;
-      font-weight: 800;
-      color: #fff;
-      cursor: pointer;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.10);
-      padding: 14px 18px;
-    }
+.form{
+background:linear-gradient(180deg,#28c18e,#18a67c);
+}
 
-    .btn-blue {
-      background: linear-gradient(180deg, #4e8cff, #2f6df6);
-    }
+.footer{
+margin-top:20px;
+font-size:13px;
+color:#666;
+}
 
-    .btn-green {
-      background: linear-gradient(180deg, #28c18e, #18a67c);
-    }
-
-    .tip {
-      margin-top: 18px;
-      font-size: 13px;
-      color: #6b7280;
-      line-height: 1.7;
-    }
-
-    @media (max-width: 430px) {
-      h1 {
-        font-size: 28px;
-      }
-
-      .btn {
-        min-height: 70px;
-        font-size: 18px;
-      }
-
-      .logo {
-        width: 96px;
-        height: 96px;
-      }
-    }
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="app">
-    <div class="logo-wrap">
-      <img class="logo" src="icon.png" alt="Linkage">
-      <h1>Linkage</h1>
-      <div class="sub">スマホメニュー</div>
-      <div id="nameBox" class="name-box"></div>
-    </div>
 
-    <div class="card">
-      <div class="menu">
-        <button class="btn btn-blue" onclick="goMain()">
-          🚗 アルコールチェック
-        </button>
+<div class="header">
 
-        <button class="btn btn-green" onclick="goForm()">
-          📄 応募フォーム
-        </button>
-      </div>
+<img class="logo" src="icon.png">
 
-      <div class="tip">
-        ホーム画面に追加すると、アプリのように使えます
-      </div>
-    </div>
-  </div>
+<div class="title">Linkage</div>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const empName = params.get("name") || "";
+<div class="sub">メニュー</div>
 
-    function goMain() {
-      let url = "alcohol.html";
-      if (empName) {
-        url += "?name=" + encodeURIComponent(empName);
-      }
-      location.href = url;
-    }
+</div>
 
-    function goForm() {
-      location.href = "apply.html";
-    }
+<div class="panel">
 
-    function initNameBox() {
-      const box = document.getElementById("nameBox");
-      if (empName) {
-        box.style.display = "block";
-        box.textContent = empName + " さんでログイン中";
-      }
-    }
+<div class="menu">
 
-    initNameBox();
-  </script>
+<button class="alcohol" onclick="goAlcohol()">
+🚗 アルコールチェック
+</button>
+
+<button class="form" onclick="goForm()">
+📄 応募フォーム
+</button>
+
+</div>
+
+<div class="footer">
+ホーム画面に追加するとアプリのように使えます
+</div>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const empName = params.get("name") || "";
+
+function goAlcohol(){
+
+let url = "alcohol.html";
+
+if(empName){
+url += "?name=" + encodeURIComponent(empName);
+}
+
+location.href = url;
+
+}
+
+function goForm(){
+
+location.href = "apply.html";
+
+}
+
+</script>
+
 </body>
 </html>
