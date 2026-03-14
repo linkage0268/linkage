@@ -1,1 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>物件写真管理</title>
 
+<style>
+
+body{
+font-family:sans-serif;
+background:#eef3fb;
+margin:0;
+padding:20px;
+}
+
+.card{
+max-width:500px;
+margin:auto;
+background:white;
+padding:25px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,.1);
+}
+
+h1{
+font-size:22px;
+margin-bottom:20px;
+}
+
+label{
+display:block;
+margin-top:15px;
+font-weight:bold;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:5px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:16px;
+}
+
+button{
+width:100%;
+margin-top:20px;
+padding:14px;
+border:none;
+border-radius:10px;
+background:#2f6df6;
+color:white;
+font-size:18px;
+font-weight:bold;
+}
+
+.msg{
+margin-top:15px;
+padding:10px;
+border-radius:10px;
+display:none;
+}
+
+.ok{
+background:#e8f7eb;
+color:#1f6b2d;
+}
+
+.ng{
+background:#fdeaea;
+color:#9e1c1c;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>物件写真管理</h1>
+
+<label>区分</label>
+<select id="category">
+<option value="掃除後写真">掃除後写真</option>
+<option value="新規物件写真">新規物件写真</option>
+<option value="退去後写真">退去後写真</option>
+</select>
+
+<label>アパート名</label>
+<input id="apartment">
+
+<label>部屋番号</label>
+<input id="room">
+
+<label>写真</label>
+<input type="file" id="file" accept="image/*" capture="environment">
+
+<button onclick="sendPhoto()">写真を保存</button>
+
+<div id="msg" class="msg"></div>
+
+</div>
+
+<script>
+
+function showMsg(text,ok){
+
+const el=document.getElementById("msg")
+
+el.style.display="block"
+el.className="msg "+(ok?"ok":"ng")
+el.textContent=text
+
+}
+
+function toBase64(file){
+
+return new Promise((resolve,reject)=>{
+
+const reader=new FileReader()
+
+reader.onload=()=>resolve(reader.result.split(',')[1])
+
+reader.onerror=reject
+
+reader.readAsDataURL(file)
+
+})
+
+}
+
+async function sendPhoto(){
+
+try{
+
+const apartment=document.getElementById("apartment").value
+const room=document.getElementById("room").value
+const category=document.getElementById("category").value
+const file=document.getElementById("file").files[0]
+
+if(!apartment) throw new Error("アパート名を入力してください")
+if(!room) throw new Error("部屋番号を入力してください")
+if(!file) throw new Error("写真を撮影してください")
+
+const payload={
+apartment:apartment,
+room:room,
+category:category,
+fileName:file.name,
+mimeType:file.type,
+bytes:await toBase64(file)
+}
+
+google.script.run
+.withSuccessHandler(res=>showMsg(res.message,res.ok))
+.withFailureHandler(()=>showMsg("送信失敗",false))
+.uploadPhoto(payload)
+
+}catch(e){
+
+showMsg(e.message,false)
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
