@@ -78,10 +78,30 @@ button{
 .form{
   background:linear-gradient(180deg,#28c18e,#18a67c);
 }
+.copy{
+  background:linear-gradient(180deg,#f59e0b,#d97706);
+}
 .footer{
   margin-top:20px;
   font-size:13px;
   color:#666;
+}
+.msg{
+  max-width:480px;
+  margin:14px auto 0;
+  padding:10px 14px;
+  border-radius:12px;
+  font-size:14px;
+  font-weight:bold;
+  display:none;
+}
+.msg.ok{
+  background:#e8f7eb;
+  color:#1f6b2d;
+}
+.msg.ng{
+  background:#fdeaea;
+  color:#9e1c1c;
 }
 </style>
 </head>
@@ -103,7 +123,11 @@ button{
     </button>
 
     <button class="form" onclick="goForm()">
-      📄 応募フォーム
+      📄 応募フォームを開く
+    </button>
+
+    <button class="copy" onclick="copyApplyUrl()">
+      🔗 応募フォームURLをコピー
     </button>
   </div>
 
@@ -112,9 +136,18 @@ button{
   </div>
 </div>
 
+<div id="msg" class="msg"></div>
+
 <script>
 const params = new URLSearchParams(window.location.search);
 const empName = params.get("name") || "";
+
+function showMsg(text, ok) {
+  const el = document.getElementById("msg");
+  el.style.display = "block";
+  el.className = "msg " + (ok ? "ok" : "ng");
+  el.textContent = text;
+}
 
 function goAlcohol() {
   let url = "alcohol.html";
@@ -130,6 +163,25 @@ function goForm() {
     url += "?name=" + encodeURIComponent(empName);
   }
   location.href = url;
+}
+
+function copyApplyUrl() {
+  if (!empName) {
+    showMsg("担当者名がありません。?name=黒須 の形で開いてください。", false);
+    return;
+  }
+
+  const applyUrl =
+    "https://linkage0268.github.io/linkage/apply.html?name=" +
+    encodeURIComponent(empName);
+
+  navigator.clipboard.writeText(applyUrl)
+    .then(function() {
+      showMsg("応募フォームURLをコピーしました。LINEやメールに貼り付けて送れます。", true);
+    })
+    .catch(function() {
+      showMsg("コピーに失敗しました。", false);
+    });
 }
 
 if (empName) {
