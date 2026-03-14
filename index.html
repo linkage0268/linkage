@@ -85,6 +85,9 @@ button{
 .property{
   background:linear-gradient(180deg,#8b5cf6,#7c3aed);
 }
+.chat{
+  background:linear-gradient(180deg,#ec4899,#db2777);
+}
 .footer{
   margin-top:20px;
   font-size:13px;
@@ -138,6 +141,10 @@ button{
     <button class="property" onclick="goProperty()">
       🏠 物件写真管理
     </button>
+
+    <button class="chat" onclick="goChat()">
+      💬 社内チャット
+    </button>
   </div>
 
   <div class="footer">
@@ -150,6 +157,12 @@ button{
 <script>
 const params = new URLSearchParams(window.location.search);
 const empName = params.get("name") || "";
+
+const PROPERTY_URL =
+  "https://script.google.com/macros/s/AKfycbzJP9JEfETS5jmhSXfcPZtSLZo4FfncJ7K9HpECJ3rg2Uf0gzmFIgnlx1focBLrlCK3cw/exec";
+
+const CHAT_URL =
+  "https://script.google.com/macros/s/AKfycbz2rySe3KdZsoruJRSnJIBxgfd_CBKUbnEcy2Dca-uh1_TTdJA2pYvt59fpX0-URjB-NQ/exec";
 
 function showMsg(text, ok) {
   const el = document.getElementById("msg");
@@ -194,8 +207,15 @@ function copyApplyUrl() {
 }
 
 function goProperty() {
-  location.href =
-    "https://script.google.com/macros/s/AKfycbxzg6zGqlooLK7kIwBSHm-j8mb14C3LozJcDwJwnjAno5VY_Ej2wZWSlxf6xMOr85d5_w/exec";
+  location.href = PROPERTY_URL;
+}
+
+function goChat() {
+  let url = CHAT_URL;
+  if (empName) {
+    url += "?name=" + encodeURIComponent(empName);
+  }
+  location.href = url;
 }
 
 if (empName) {
