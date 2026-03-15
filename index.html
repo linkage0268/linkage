@@ -203,13 +203,40 @@ function copyApplyUrl() {
     "https://linkage0268.github.io/linkage/apply.html?name=" +
     encodeURIComponent(empName);
 
-  navigator.clipboard.writeText(applyUrl)
-    .then(function() {
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(applyUrl)
+      .then(function() {
+        showMsg("応募フォームURLをコピーしました。\nLINEやメールに貼り付けて送れます。", true);
+      })
+      .catch(function() {
+        fallbackCopyText(applyUrl);
+      });
+  } else {
+    fallbackCopyText(applyUrl);
+  }
+}
+
+function fallbackCopyText(text) {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  document.body.appendChild(textarea);
+
+  textarea.select();
+
+  try {
+    const ok = document.execCommand("copy");
+    if (ok) {
       showMsg("応募フォームURLをコピーしました。\nLINEやメールに貼り付けて送れます。", true);
-    })
-    .catch(function() {
+    } else {
       showMsg("コピーに失敗しました。", false);
-    });
+    }
+  } catch (e) {
+    showMsg("コピーに失敗しました。", false);
+  }
+
+  document.body.removeChild(textarea);
 }
 
 function goProperty() {
