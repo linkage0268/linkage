@@ -94,14 +94,20 @@ button{
   color:#666;
 }
 .msg{
-  max-width:480px;
-  margin:14px auto 0;
-  padding:10px 14px;
-  border-radius:12px;
-  font-size:14px;
+  position:fixed;
+  left:50%;
+  bottom:40px;
+  transform:translateX(-50%);
+  max-width:90%;
+  width:auto;
+  padding:14px 18px;
+  border-radius:14px;
+  font-size:15px;
   font-weight:bold;
   display:none;
   white-space:pre-line;
+  z-index:9999;
+  box-shadow:0 6px 20px rgba(0,0,0,0.25);
 }
 .msg.ok{
   background:#e8f7eb;
@@ -193,6 +199,31 @@ function goForm() {
   location.href = url;
 }
 
+function fallbackCopyText(text) {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  textarea.style.top = "0";
+  document.body.appendChild(textarea);
+
+  textarea.focus();
+  textarea.select();
+
+  try {
+    const ok = document.execCommand("copy");
+    if (ok) {
+      showMsg("応募フォームURLをコピーしました。\nLINEやメールに貼り付けて送れます。", true);
+    } else {
+      showMsg("コピーに失敗しました。URLを手動でコピーしてください。", false);
+    }
+  } catch (e) {
+    showMsg("コピーに失敗しました。URLを手動でコピーしてください。", false);
+  }
+
+  document.body.removeChild(textarea);
+}
+
 function copyApplyUrl() {
   if (!empName) {
     showMsg("担当者名がありません。?name=黒須 の形で開いてください。", false);
@@ -214,29 +245,6 @@ function copyApplyUrl() {
   } else {
     fallbackCopyText(applyUrl);
   }
-}
-
-function fallbackCopyText(text) {
-  const textarea = document.createElement("textarea");
-  textarea.value = text;
-  textarea.style.position = "fixed";
-  textarea.style.left = "-9999px";
-  document.body.appendChild(textarea);
-
-  textarea.select();
-
-  try {
-    const ok = document.execCommand("copy");
-    if (ok) {
-      showMsg("応募フォームURLをコピーしました。\nLINEやメールに貼り付けて送れます。", true);
-    } else {
-      showMsg("コピーに失敗しました。", false);
-    }
-  } catch (e) {
-    showMsg("コピーに失敗しました。", false);
-  }
-
-  document.body.removeChild(textarea);
 }
 
 function goProperty() {
