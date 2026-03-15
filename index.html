@@ -199,7 +199,7 @@ function copyApplyUrl() {
 
   navigator.clipboard.writeText(applyUrl)
     .then(function() {
-      showMsg("応募フォームURLをコピーしました。LINEやメールに貼り付けて送れます。", true);
+      showMsg("応募フォームURLをコピーしました。\nLINEやメールに貼り付けて送れます。", true);
     })
     .catch(function() {
       showMsg("コピーに失敗しました。", false);
