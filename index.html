@@ -142,7 +142,7 @@ button{
       🏠 物件写真管理
     </button>
 
-    <button id="chatBtn" class="chat" onclick="goChat()">
+    <button class="chat" onclick="goChat()">
       💬 社内チャット
     </button>
   </div>
@@ -162,13 +162,19 @@ const PROPERTY_URL =
   "https://script.google.com/macros/s/AKfycbzJP9JEfETS5jmhSXfcPZtSLZo4FfncJ7K9HpECJ3rg2Uf0gzmFIgnlx1focBLrlCK3cw/exec";
 
 const CHAT_URL =
-  "https://script.google.com/macros/s/AKfycbyZoO07pMnNwUHgEuPgEBBhSLX3N_DWFouOOIrVDf-Raqky_u4jAfRsDaSGIlAGcC4/exec";
+  "https://script.google.com/macros/s/AKfycbz2rySe3KdZsoruJRSnJIBxgfd_CBKUbnEcy2Dca-uh1_TTdJA2pYvt59fpX0-URjB-NQ/exec";
 
 function showMsg(text, ok) {
   const el = document.getElementById("msg");
+  if (!el) return;
+
   el.style.display = "block";
   el.className = "msg " + (ok ? "ok" : "ng");
   el.textContent = text;
+
+  setTimeout(function() {
+    el.style.display = "none";
+  }, 3000);
 }
 
 function goAlcohol() {
@@ -199,7 +205,7 @@ function copyApplyUrl() {
 
   navigator.clipboard.writeText(applyUrl)
     .then(function() {
-      showMsg("応募フォームURLをコピーしました。LINEやメールに貼り付けて送れます。", true);
+      showMsg("応募フォームURLをコピーしました。\nLINEやメールに貼り付けて送れます。", true);
     })
     .catch(function() {
       showMsg("コピーに失敗しました。", false);
@@ -218,39 +224,11 @@ function goChat() {
   location.href = url;
 }
 
-function updateChatBadge() {
-  const btn = document.getElementById("chatBtn");
-  if (!btn) return;
-
-  if (!empName) {
-    btn.textContent = "💬 社内チャット";
-    return;
-  }
-
-  const key = "linkage_chat_unread_count_" + empName;
-  const count = Number(localStorage.getItem(key) || "0");
-
-  if (count > 0) {
-    btn.textContent = "💬 社内チャット (" + count + ")";
-  } else {
-    btn.textContent = "💬 社内チャット";
-  }
-}
-
 if (empName) {
   const box = document.getElementById("nameBox");
   box.style.display = "block";
   box.textContent = empName + " さんでログイン中";
 }
-
-updateChatBadge();
-
-window.addEventListener("focus", updateChatBadge);
-document.addEventListener("visibilitychange", function() {
-  if (!document.hidden) {
-    updateChatBadge();
-  }
-});
 </script>
 
 </body>
