@@ -142,7 +142,7 @@ button{
       🏠 物件写真管理
     </button>
 
-    <button class="chat" onclick="goChat()">
+    <button id="chatBtn" class="chat" onclick="goChat()">
       💬 社内チャット
     </button>
   </div>
@@ -156,13 +156,13 @@ button{
 
 <script>
 const params = new URLSearchParams(window.location.search);
-const empName = params.get("name") || "";
+const empName = (params.get("name") || "").replace(/"/g, "").trim();
 
 const PROPERTY_URL =
   "https://script.google.com/macros/s/AKfycbzJP9JEfETS5jmhSXfcPZtSLZo4FfncJ7K9HpECJ3rg2Uf0gzmFIgnlx1focBLrlCK3cw/exec";
 
 const CHAT_URL =
-  "https://script.google.com/macros/s/AKfycbwbaydN9H3NgzUb4IebJ47qFpGcwUZQdyxKct7hMNyYzEF9lH5lq9IxXCDXldJDIl8yGQ/exec";
+  "https://script.google.com/macros/s/AKfycbz2rySe3KdZsoruJRSnJIBxgfd_CBKUbnEcy2Dca-uh1_TTdJA2pYvt59fpX0-URjB-NQ/exec";
 
 function showMsg(text, ok) {
   const el = document.getElementById("msg");
@@ -218,11 +218,39 @@ function goChat() {
   location.href = url;
 }
 
+function updateChatBadge() {
+  const btn = document.getElementById("chatBtn");
+  if (!btn) return;
+
+  if (!empName) {
+    btn.textContent = "💬 社内チャット";
+    return;
+  }
+
+  const key = "linkage_chat_unread_count_" + empName;
+  const count = Number(localStorage.getItem(key) || "0");
+
+  if (count > 0) {
+    btn.textContent = "💬 社内チャット (" + count + ")";
+  } else {
+    btn.textContent = "💬 社内チャット";
+  }
+}
+
 if (empName) {
   const box = document.getElementById("nameBox");
   box.style.display = "block";
   box.textContent = empName + " さんでログイン中";
 }
+
+updateChatBadge();
+
+window.addEventListener("focus", updateChatBadge);
+document.addEventListener("visibilitychange", function() {
+  if (!document.hidden) {
+    updateChatBadge();
+  }
+});
 </script>
 
 </body>
