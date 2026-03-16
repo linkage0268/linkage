@@ -154,6 +154,10 @@ button{
     <button class="chat" onclick="goChat()">
       💬 社内チャット
     </button>
+
+    <button class="property-viewer" onclick="goPropertyViewer()">
+     🔍 物件写真検索
+    </button>
   </div>
 
   <div class="footer">
@@ -162,7 +166,7 @@ button{
 </div>
 
 <div id="msg" class="msg"></div>
-
+ 
 <script>
 const params = new URLSearchParams(window.location.search);
 const empName = (params.get("name") || "").replace(/"/g, "").trim();
@@ -267,6 +271,11 @@ if (empName) {
   box.style.display = "block";
   box.textContent = empName + " さんでログイン中";
 }
+
+ function goPropertyViewer() {
+  location.href =
+    "https://script.google.com/macros/s/AKfycbzJP9JEfETS5jmhSXfcPZtSLZo4FfncJ7K9HpECJ3rg2Uf0gzmFIgnlx1focBLrlCK3cw/exec?mode=viewer";
+} 
 </script>
 
 </body>
