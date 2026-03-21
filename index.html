@@ -196,8 +196,12 @@ function copyForm(){
   alert("コピーしました！");
 }
 
-  function goUse() {
-  location.href = USE_URL;
+ function goUse() {
+  let url = USE_URL;
+  if (empName) {
+    url += "?name=" + encodeURIComponent(empName);
+  }
+  location.href = url;
 }
 </script>
 
