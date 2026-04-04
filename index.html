@@ -17,25 +17,22 @@ body{
   font-family:sans-serif;
   background:#eef3fb;
   text-align:center;
-  padding-bottom:40px;
+  padding-bottom:80px; /* ←フッター分余白 */
 }
 
 .header{
-  padding:40px 20px 10px;
+  padding:30px 20px 10px;
 }
 
 .logo{
-  width:120px;
-  height:120px;
-  object-fit:contain;
-  display:block;
+  width:100px;
+  height:100px;
   margin:auto;
 }
 
 .title{
-  font-size:36px;
+  font-size:32px;
   font-weight:bold;
-  margin-top:10px;
 }
 
 .sub{
@@ -61,7 +58,6 @@ body{
   border-radius:14px;
   color:#fff;
   cursor:pointer;
-  display:block;
 }
 
 /* ボタンカラー */
@@ -71,14 +67,38 @@ body{
 .property{ background:linear-gradient(180deg,#8b5cf6,#5b21b6); }
 .chat{ background:linear-gradient(180deg,#ec4899,#be185d); }
 .viewer{ background:linear-gradient(180deg,#14b8a6,#0f766e); }
-
-/* ★追加：車両管理 */
 .car{ background:linear-gradient(180deg,#0ea5e9,#0369a1); }
- .btn.use {
-  background: linear-gradient(135deg, #36d1dc, #5b86e5);
-  color: white;
-  font-weight: bold;
-} 
+.use{ background:linear-gradient(135deg,#36d1dc,#5b86e5); }
+
+/* ===================== */
+/* ★ 下固定メニュー */
+/* ===================== */
+.bottomNav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:60px;
+  background:#fff;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.navBtn{
+  flex:1;
+  border:none;
+  background:none;
+  font-size:12px;
+  color:#333;
+}
+
+.navBtn span{
+  display:block;
+  font-size:20px;
+}
+
 </style>
 </head>
 
@@ -96,36 +116,51 @@ body{
 
 <button class="btn alcohol" onclick="goAlcohol()">🚗 アルコールチェック</button>
 <button class="btn form" onclick="goForm()">📄 応募フォームを開く</button>
-<button class="btn copy" onclick="copyForm()">🔗 応募フォームURLをコピー</button>
+<button class="btn copy" onclick="copyForm()">🔗 URLコピー</button>
 
-<!-- ★追加：車両管理 -->
 <button class="btn car" onclick="goCar()">🚘 車両管理</button>
 <button class="btn use" onclick="goUse()">🚚 車両使用管理</button>
 <button class="btn property" onclick="goProperty()">🏠 物件写真管理</button>
 <button class="btn chat" onclick="goChat()">💬 社内チャット</button>
-<button class="btn viewer" onclick="goPropertyViewer()">🔍 物件写真検索</button>
+<button class="btn viewer" onclick="goPropertyViewer()">🔍 物件検索</button>
+
+<!-- ===================== -->
+<!-- ★ 下固定メニュー -->
+<!-- ===================== -->
+<div class="bottomNav">
+  <button class="navBtn" onclick="location.reload()">
+    <span>🏠</span>
+    ホーム
+  </button>
+
+  <button class="navBtn" onclick="goCar()">
+    <span>🚘</span>
+    車両
+  </button>
+
+  <button class="navBtn" onclick="goUse()">
+    <span>🚚</span>
+    使用
+  </button>
+
+  <button class="navBtn" onclick="goChat()">
+    <span>💬</span>
+    チャット
+  </button>
+</div>
 
 <script>
-// =============================
-// URL設定（ここだけ変更してください）
-// =============================
 
+// URL設定
 const ALCOHOL_URL = "https://script.google.com/macros/s/AKfycbwDCUgv8Q8iEH4xfTY8m6qzl7qwFKot_5_vvxNOJ6gxaXZsXda0dT9oXzgJKfvvdy049A/exec";
-
 const FORM_URL = "https://script.google.com/macros/s/AKfycbwIw3h--vBxXMP8AYzOyG51oITqv6WKYm2T41nxFY1qsbkZo8dOnwfgKrF-FPARfCI7/exec";
-
 const PROPERTY_URL = "https://script.google.com/macros/s/AKfycbwQWJ67AFKF3TWXAmNDU4tkUP8o1vLXOdm5RzZpk0EaSVJ2vWG66HVSsD5rwtV8eLhI3A/exec";
-
 const CHAT_URL = "https://script.google.com/macros/s/AKfycbwrm299ec_3-f5TPbSAeGwnh7IEv2dP985ZzEgA5bXk-pvIrQcswL1VcgAVcfHmkyeUlw/exec";
-
-/* 車両管理 */
 const CAR_URL = "https://script.google.com/macros/s/AKfycbzlrFr9eN9U-6KYTlbz8wJ2PS3ZEPnUGtltqw9zBFk5b0YqxixZ9yYtuKEJ3TLKUsRwYQ/exec";
-
 const VIEWER_URL = "https://script.google.com/macros/s/AKfycbwQWJ67AFKF3TWXAmNDU4tkUP8o1vLXOdm5RzZpk0EaSVJ2vWG66HVSsD5rwtV8eLhI3A/exec?mode=viewer";
 const USE_URL = "https://script.google.com/macros/s/AKfycbwd5QoQhJVg0LkBSrC_k-DY5_N2iQRoiPKzSjBbwK6Bj9OuMM2JJa-LDhxDf5xlL3JO-g/exec";
-// =============================
-// 名前取得（?name=黒須）
-// =============================
+
+// 名前取得
 const params = new URLSearchParams(location.search);
 const empName = params.get("name");
 
@@ -134,65 +169,27 @@ if(empName){
     "<b>" + empName + "</b> さんでログイン中";
 }
 
-
-// =============================
-// 各機能
-// =============================
-function goAlcohol(){
-  move(ALCOHOL_URL);
-}
-
-function goForm(){
-  move(FORM_URL);
-}
-
-function goProperty(){
-  move(PROPERTY_URL);
-}
-
-function goChat(){
-  move(CHAT_URL);
-}
-
-function goPropertyViewer(){
-  move(VIEWER_URL);
-}
-
-/* ★追加：車両管理 */
-function goCar(){
-  move(CAR_URL);
-}
-
-
-// =============================
-// 共通遷移処理（name引き渡し）
-// =============================
-function move(baseUrl){
-  let url = baseUrl;
-
+// 共通遷移
+function move(url){
   if(empName){
     url += "?name=" + encodeURIComponent(empName);
   }
-
   location.href = url;
 }
 
+function goAlcohol(){ move(ALCOHOL_URL); }
+function goForm(){ move(FORM_URL); }
+function goProperty(){ move(PROPERTY_URL); }
+function goChat(){ move(CHAT_URL); }
+function goCar(){ move(CAR_URL); }
+function goUse(){ move(USE_URL); }
+function goPropertyViewer(){ move(VIEWER_URL); }
 
-// =============================
-// URLコピー
-// =============================
 function copyForm(){
   navigator.clipboard.writeText(FORM_URL);
   alert("コピーしました！");
 }
 
- function goUse() {
-  let url = USE_URL;
-  if (empName) {
-    url += "?name=" + encodeURIComponent(empName);
-  }
-  location.href = url;
-}
 </script>
 
 </body>
