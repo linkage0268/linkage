@@ -172,7 +172,7 @@ if(empName){
 // 共通遷移
 function move(url){
   if(empName){
-    url += "?name=" + encodeURIComponent(empName);
+    url += (url.includes("?") ? "&" : "?") + "name=" + encodeURIComponent(empName);
   }
   location.href = url;
 }
