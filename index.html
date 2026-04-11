@@ -288,7 +288,17 @@ function goChat(){ move(CHAT_URL); }
 function goCar(){ move(CAR_URL); }
 function goUse(){ move(USE_URL); }
 function goPropertyViewer(){ move(VIEWER_URL); }
-function goAdmin(){ move(ADMIN_URL); }
+function goAdmin(){
+  let url = ADMIN_URL;
+
+  if (empName) {
+    url += (url.includes("?") ? "&" : "?") + "name=" + encodeURIComponent(empName);
+  }
+
+  url += (url.includes("?") ? "&" : "?") + "t=" + Date.now();
+
+  location.href = url;
+}
 
 function copyForm(){
   navigator.clipboard.writeText(FORM_URL);
