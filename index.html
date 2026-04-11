@@ -201,7 +201,7 @@ body{
 <button class="btn chat" onclick="goChat()">💬 社内チャット</button>
 <button class="btn viewer" onclick="goPropertyViewer()">🔍 物件検索</button>
 
-<div id="adminArea" style="display:none;">
+<div id="adminArea" style="display:block;">
   <button class="btn admin" onclick="goAdmin()">⚙️ 管理画面</button>
 </div>
 
@@ -251,13 +251,13 @@ const VIEWER_URL = "https://script.google.com/macros/s/AKfycbxvP86tyS2YsIwAO6YgZ
 const USE_URL = "https://script.google.com/macros/s/AKfycbwER2h4Hj63H1AIjuMfdJjRkSFFtnVrOkFQLvqdnpBpcWvS5wD9kTedODGNIncEtH6lAw/exec";
 
 // 管理画面URL
-const ADMIN_URL = "https://script.google.com/macros/s/AKfycbyrqSfH7PuNFk5GmFBcdTwUgdPeUBduJxjgjkpK48ms5mvxe9IFitkeHCpmSowqFTxUdw/exec?v=3";
+const ADMIN_URL = "https://script.google.com/macros/s/AKfycbwIEMBTwFuu9z4poNGqya-qFPWICXq5Xsz3IT2XKM4Ovg4AXDv5JzmFFNOuRoDG8JTMSA/exec";
 
 // 更新情報API URL
 const UPDATE_API_URL = "https://script.google.com/macros/s/AKfycbyvFQld3hKaFHx29kaBtgo9RQUYhm-XhzCzKfIYTu_j6MWvNpkgvDjMyer59z3TvBNtrQ/exec";
 
-// 管理画面を見せる人
-const ADMIN_USERS = ["猪俣", "黒須"];
+// いまのメニュー版
+const CURRENT_MENU_VERSION = "v2.0.0";
 
 // 名前取得
 const params = new URLSearchParams(location.search);
@@ -267,11 +267,6 @@ const empName = params.get("name");
 if (empName) {
   document.getElementById("userBox").innerHTML =
     "<b>" + escapeHtml(empName) + "</b> さんでログイン中";
-}
-
-// 管理者だけ管理画面ボタン表示
-if (empName && ADMIN_USERS.includes(empName)) {
-  document.getElementById("adminArea").style.display = "block";
 }
 
 // HTMLエスケープ
@@ -284,7 +279,7 @@ function escapeHtml(text) {
     .replace(/'/g, "&#039;");
 }
 
-// URLに名前を付ける
+// 名前を付ける
 function appendName(url) {
   let result = url;
   if (empName) {
@@ -319,7 +314,6 @@ function goHome(){
   location.href = url;
 }
 
-// ★ 管理画面は毎回キャッシュ回避付き
 function goAdmin(){
   let url = appendName(ADMIN_URL);
   url += (url.includes("?") ? "&" : "?") + "t=" + Date.now();
@@ -331,13 +325,24 @@ function copyForm(){
   alert("コピーしました！");
 }
 
+// バージョン比較
+function normalizeVersion(v) {
+  return String(v || "").trim().toLowerCase();
+}
+
 // 更新通知
 async function checkUpdateInfo() {
   try {
     const res = await fetch(UPDATE_API_URL + "?t=" + Date.now(), { cache: "no-store" });
     const data = await res.json();
 
-    if (!data.update_on) return;
+    const updateOn = data.update_on === true || String(data.update_on).toLowerCase() === "true";
+    const forceUpdate = data.force_update === true || String(data.force_update).toLowerCase() === "true";
+    const newVersion = normalizeVersion(data.version);
+    const currentVersion = normalizeVersion(CURRENT_MENU_VERSION);
+
+    if (!updateOn) return;
+    if (newVersion && newVersion === currentVersion) return;
 
     document.getElementById("updateTitle").textContent = data.title || "更新があります";
     document.getElementById("updateVersion").textContent = data.version ? ("バージョン: " + data.version) : "";
@@ -353,7 +358,7 @@ async function checkUpdateInfo() {
     };
 
     const laterBtn = document.getElementById("updateLaterBtn");
-    if (data.force_update) {
+    if (forceUpdate) {
       laterBtn.style.display = "none";
       document.body.style.overflow = "hidden";
     } else {
