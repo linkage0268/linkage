@@ -10,6 +10,9 @@
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Linkage">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 
 <style>
 body{
@@ -203,7 +206,7 @@ body{
 </div>
 
 <div class="bottomNav">
-  <button class="navBtn" onclick="location.reload()">
+  <button class="navBtn" onclick="goHome()">
     <span>🏠</span>
     ホーム
   </button>
@@ -246,10 +249,12 @@ const CHAT_URL = "https://script.google.com/macros/s/AKfycbzY--b0L9LzJ7PCjO1POgA
 const CAR_URL = "https://script.google.com/macros/s/AKfycbxLzeCa7O5_Yg5ZaVQZF8K-2OlGXeT5gmGwEe4ZlTLrEGYOYJUWzYvylgJ1U0PHXikO-g/exec";
 const VIEWER_URL = "https://script.google.com/macros/s/AKfycbxvP86tyS2YsIwAO6YgZsUIXF9H7wx40q7D6BqNSf8R6UZYl6fkWTHa1WkFj-OskSUp5Q/exec?mode=viewer";
 const USE_URL = "https://script.google.com/macros/s/AKfycbwER2h4Hj63H1AIjuMfdJjRkSFFtnVrOkFQLvqdnpBpcWvS5wD9kTedODGNIncEtH6lAw/exec";
-const ADMIN_URL = "const ADMIN_URL = "https://script.google.com/macros/s/AKfycbwibzZFNVXys5VJkbUpYpPTriXTPvBuYKhM2AryGKOo_bvMqpG8QXF87S7uxstmUigTtw/exec?v=2";
+
+// 管理画面URL
+const ADMIN_URL = "https://script.google.com/macros/s/AKfycbwibzZFNVXys5VJkbUpYpPTriXTPvBuYKhM2AryGKOo_bvMqpG8QXF87S7uxstmUigTtw/exec?v=3";
 
 // 更新情報API URL
-const UPDATE_API_URL = "https://script.google.com/macros/s/AKfycbwlEMBTwFuu9z4poNGqya-qFPWlCXq5Xsz3IT2XKM4Ovg4AXDv5JzmFFN0uRoDG8JTMSA/exec";
+const UPDATE_API_URL = "https://script.google.com/macros/s/AKfycbyvFQld3hKaFHx29kaBtgo9RQUYhm-XhzCzKfIYTu_j6MWvNpkgvDjMyer59z3TvBNtrQ/exec";
 
 // 管理画面を見せる人
 const ADMIN_USERS = ["猪俣", "黒須"];
@@ -258,27 +263,43 @@ const ADMIN_USERS = ["猪俣", "黒須"];
 const params = new URLSearchParams(location.search);
 const empName = params.get("name");
 
-if(empName){
+// ログイン表示
+if (empName) {
   document.getElementById("userBox").innerHTML =
-    "<b>" + empName + "</b> さんでログイン中";
+    "<b>" + escapeHtml(empName) + "</b> さんでログイン中";
 }
 
 // 管理者だけ管理画面ボタン表示
-if(empName && ADMIN_USERS.includes(empName)){
+if (empName && ADMIN_USERS.includes(empName)) {
   document.getElementById("adminArea").style.display = "block";
 }
 
+// HTMLエスケープ
+function escapeHtml(text) {
+  return String(text || '')
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// URLに名前を付ける
+function appendName(url) {
+  let result = url;
+  if (empName) {
+    result += (result.includes("?") ? "&" : "?") + "name=" + encodeURIComponent(empName);
+  }
+  return result;
+}
+
 // 共通遷移
-function move(url){
-  if(!url){
+function move(url) {
+  if (!url) {
     alert("URLが設定されていません。");
     return;
   }
-
-  if(empName){
-    url += (url.includes("?") ? "&" : "?") + "name=" + encodeURIComponent(empName);
-  }
-  location.href = url;
+  location.href = appendName(url);
 }
 
 function goAlcohol(){ move(ALCOHOL_URL); }
@@ -288,15 +309,20 @@ function goChat(){ move(CHAT_URL); }
 function goCar(){ move(CAR_URL); }
 function goUse(){ move(USE_URL); }
 function goPropertyViewer(){ move(VIEWER_URL); }
-function goAdmin(){
-  let url = ADMIN_URL;
 
+function goHome(){
+  let url = location.origin + location.pathname;
   if (empName) {
-    url += (url.includes("?") ? "&" : "?") + "name=" + encodeURIComponent(empName);
+    url += "?name=" + encodeURIComponent(empName);
   }
-
   url += (url.includes("?") ? "&" : "?") + "t=" + Date.now();
+  location.href = url;
+}
 
+// ★ 管理画面は毎回キャッシュ回避付き
+function goAdmin(){
+  let url = appendName(ADMIN_URL);
+  url += (url.includes("?") ? "&" : "?") + "t=" + Date.now();
   location.href = url;
 }
 
@@ -308,42 +334,42 @@ function copyForm(){
 // 更新通知
 async function checkUpdateInfo() {
   try {
-    const res = await fetch(UPDATE_API_URL + '?t=' + Date.now());
+    const res = await fetch(UPDATE_API_URL + "?t=" + Date.now(), { cache: "no-store" });
     const data = await res.json();
 
     if (!data.update_on) return;
 
-    document.getElementById('updateTitle').textContent = data.title || '更新があります';
-    document.getElementById('updateVersion').textContent = data.version ? ('バージョン: ' + data.version) : '';
-    document.getElementById('updateMessage').textContent = data.message || '最新版へ更新してください。';
+    document.getElementById("updateTitle").textContent = data.title || "更新があります";
+    document.getElementById("updateVersion").textContent = data.version ? ("バージョン: " + data.version) : "";
+    document.getElementById("updateMessage").textContent = data.message || "最新版へ更新してください。";
 
-    document.getElementById('updateGoBtn').onclick = function() {
+    document.getElementById("updateGoBtn").onclick = function() {
       let newUrl = data.new_url || location.href;
       if (empName) {
-        newUrl += (newUrl.includes('?') ? '&' : '?') + 'name=' + encodeURIComponent(empName);
+        newUrl += (newUrl.includes("?") ? "&" : "?") + "name=" + encodeURIComponent(empName);
       }
+      newUrl += (newUrl.includes("?") ? "&" : "?") + "t=" + Date.now();
       location.href = newUrl;
     };
 
-    const laterBtn = document.getElementById('updateLaterBtn');
+    const laterBtn = document.getElementById("updateLaterBtn");
     if (data.force_update) {
-      laterBtn.style.display = 'none';
-      document.body.style.overflow = 'hidden';
+      laterBtn.style.display = "none";
+      document.body.style.overflow = "hidden";
     } else {
-      laterBtn.style.display = 'block';
+      laterBtn.style.display = "block";
       laterBtn.onclick = function() {
-        document.getElementById('updateOverlay').style.display = 'none';
+        document.getElementById("updateOverlay").style.display = "none";
       };
     }
 
-    document.getElementById('updateOverlay').style.display = 'flex';
-
+    document.getElementById("updateOverlay").style.display = "flex";
   } catch (e) {
-    console.log('更新情報の取得失敗', e);
+    console.log("更新情報の取得失敗", e);
   }
 }
 
-window.addEventListener('load', function() {
+window.addEventListener("load", function() {
   checkUpdateInfo();
 });
 </script>
