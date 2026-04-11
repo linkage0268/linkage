@@ -160,10 +160,10 @@ const CAR_URL = "https://script.google.com/macros/s/AKfycbxLzeCa7O5_Yg5ZaVQZF8K-
 const VIEWER_URL = "https://script.google.com/macros/s/AKfycbxvP86tyS2YsIwAO6YgZsUIXF9H7wx40q7D6BqNSf8R6UZYl6fkWTHa1WkFj-OskSUp5Q/exec?mode=viewer";
 const USE_URL = "https://script.google.com/macros/s/AKfycbwER2h4Hj63H1AIjuMfdJjRkSFFtnVrOkFQLvqdnpBpcWvS5wD9kTedODGNIncEtH6lAw/exec";
 
-// ★ ここに管理画面のURLを入れてください
-const ADMIN_URL = "ここに管理画面のGAS URL";
+// 管理画面URL
+const ADMIN_URL = "https://script.google.com/macros/s/AKfycbwibzZFNVXys5VJkbUpYpPTriXTPvBuYKhM2AryGKOo_bvMqpG8QXF87S7uxstmUigTtw/exec";
 
-// ★ 管理画面を見せる人
+// 管理画面を見せる人
 const ADMIN_USERS = ["猪俣", "黒須"];
 
 // 名前取得
@@ -182,8 +182,8 @@ if(empName && ADMIN_USERS.includes(empName)){
 
 // 共通遷移
 function move(url){
-  if(!url || url.indexOf("ここに") !== -1){
-    alert("URLがまだ設定されていません。");
+  if(!url){
+    alert("URLが設定されていません。");
     return;
   }
 
