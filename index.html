@@ -22,28 +22,23 @@ body{
   text-align:center;
   padding-bottom:80px;
 }
-
 .header{
   padding:30px 20px 10px;
 }
-
 .logo{
   width:100px;
   height:100px;
   margin:auto;
   object-fit:contain;
 }
-
 .title{
   font-size:32px;
   font-weight:bold;
 }
-
 .sub{
   color:#666;
   margin-bottom:20px;
 }
-
 .nameBox{
   max-width:480px;
   margin:0 auto 15px;
@@ -51,7 +46,6 @@ body{
   background:#fff;
   border-radius:12px;
 }
-
 .btn{
   width:90%;
   max-width:480px;
@@ -64,8 +58,6 @@ body{
   cursor:pointer;
   display:block;
 }
-
-/* ボタンカラー */
 .alcohol{ background:linear-gradient(180deg,#3b82f6,#1d4ed8); }
 .form{ background:linear-gradient(180deg,#10b981,#047857); }
 .copy{ background:linear-gradient(180deg,#f59e0b,#b45309); }
@@ -77,7 +69,6 @@ body{
 .schedule{ background:linear-gradient(180deg,#7c3aed,#5b21b6); }
 .admin{ background:linear-gradient(180deg,#64748b,#334155); }
 
-/* 下固定メニュー */
 .bottomNav{
   position:fixed;
   bottom:0;
@@ -91,7 +82,6 @@ body{
   box-shadow:0 -2px 10px rgba(0,0,0,0.1);
   z-index:100;
 }
-
 .navBtn{
   flex:1;
   border:none;
@@ -99,13 +89,11 @@ body{
   font-size:12px;
   color:#333;
 }
-
 .navBtn span{
   display:block;
   font-size:20px;
 }
 
-/* 更新通知 */
 .updateOverlay{
   position:fixed;
   inset:0;
@@ -116,7 +104,6 @@ body{
   z-index:9999;
   padding:20px;
 }
-
 .updateCard{
   width:100%;
   max-width:520px;
@@ -126,19 +113,16 @@ body{
   box-shadow:0 18px 40px rgba(0,0,0,0.25);
   text-align:left;
 }
-
 .updateTitle{
   font-size:24px;
   font-weight:bold;
   margin-bottom:10px;
 }
-
 .updateVersion{
   font-size:14px;
   color:#666;
   margin-bottom:12px;
 }
-
 .updateMessage{
   font-size:16px;
   line-height:1.8;
@@ -146,12 +130,10 @@ body{
   white-space:pre-line;
   margin-bottom:18px;
 }
-
 .updateButtons{
   display:flex;
   gap:10px;
 }
-
 .updateBtn{
   flex:1;
   min-height:50px;
@@ -161,12 +143,10 @@ body{
   font-weight:bold;
   cursor:pointer;
 }
-
 .updatePrimary{
   background:linear-gradient(180deg,#2f6df6,#2457c9);
   color:#fff;
 }
-
 .updateSecondary{
   background:#e5e7eb;
   color:#111;
@@ -188,9 +168,7 @@ body{
   <div class="sub">メニュー</div>
 </div>
 
-<div class="nameBox" id="userBox">
-  ログイン中
-</div>
+<div class="nameBox" id="userBox">ログイン中</div>
 
 <button class="btn alcohol" onclick="goAlcohol()">🚗 アルコールチェック</button>
 <button class="btn form" onclick="goForm()">📄 応募フォームを開く</button>
@@ -198,7 +176,7 @@ body{
 
 <button class="btn car" onclick="goCar()">🚘 車両管理</button>
 <button class="btn use" onclick="goUse()">🚚 車両使用管理</button>
-<button class="btn schedule" onclick="goSchedule()">📅 スケジュール</button>
+<button class="btn schedule" onclick="goSchedule()">🗓️ スケジュール</button>
 <button class="btn property" onclick="goProperty()">🏠 物件写真管理</button>
 <button class="btn chat" onclick="goChat()">💬 社内チャット</button>
 <button class="btn viewer" onclick="goPropertyViewer()">🔍 物件検索</button>
@@ -212,24 +190,20 @@ body{
     <span>🏠</span>
     ホーム
   </button>
-
   <button class="navBtn" onclick="goCar()">
     <span>🚘</span>
     車両
   </button>
-
   <button class="navBtn" onclick="goUse()">
     <span>🚚</span>
     使用
   </button>
-
   <button class="navBtn" onclick="goChat()">
     <span>💬</span>
     チャット
   </button>
 </div>
 
-<!-- 更新通知 -->
 <div class="updateOverlay" id="updateOverlay">
   <div class="updateCard">
     <div class="updateTitle" id="updateTitle">更新があります</div>
@@ -243,7 +217,6 @@ body{
 </div>
 
 <script>
-// URL設定
 const ALCOHOL_URL = "https://script.google.com/macros/s/AKfycbwDCUgv8Q8iEH4xfTY8m6qzl7qwFKot_5_vvxNOJ6gxaXZsXda0dT9oXzgJKfvvdy049A/exec";
 const FORM_URL = "https://script.google.com/macros/s/AKfycbwIw3h--vBxXMP8AYzOyG51oITqv6WKYm2T41nxFY1qsbkZo8dOnwfgKrF-FPARfCI7/exec";
 const PROPERTY_URL = "https://script.google.com/macros/s/AKfycbxvP86tyS2YsIwAO6YgZsUIXF9H7wx40q7D6BqNSf8R6UZYl6fkWTHa1WkFj-OskSUp5Q/exec";
@@ -251,32 +224,14 @@ const CHAT_URL = "https://script.google.com/macros/s/AKfycbzY--b0L9LzJ7PCjO1POgA
 const CAR_URL = "https://script.google.com/macros/s/AKfycbxLzeCa7O5_Yg5ZaVQZF8K-2OlGXeT5gmGwEe4ZlTLrEGYOYJUWzYvylgJ1U0PHXikO-g/exec";
 const VIEWER_URL = "https://script.google.com/macros/s/AKfycbxvP86tyS2YsIwAO6YgZsUIXF9H7wx40q7D6BqNSf8R6UZYl6fkWTHa1WkFj-OskSUp5Q/exec?mode=viewer";
 const USE_URL = "https://script.google.com/macros/s/AKfycbxQev0GXTduIpwVv3fS4dIHnYBKtBZEdh0iRsq9lE2Li_AktExOdkGPuzQBKHR3M9AdOA/exec";
-
-/* ★ スケジュールURLを追加 */
-const SCHEDULE_URL = "https://script.google.com/macros/s/AKfycbxYGGEmQz805vndpm3gR44FwI1W6kfjhbvRaH6k_8jHkxWkN7vQsbLWbkqHpTP3ET89/exec";
-
-// 管理画面URL
+const SCHEDULE_URL = "https://script.google.com/macros/s/あなたのスケジュールGASのURL/exec";
 const ADMIN_URL = "https://script.google.com/macros/s/AKfycbzP7LxDGpT9WC01Ppa1-sfqD63nhoGOR-B9N5aTti8Lt4m0eGmlpg_ba02ebps_XmY1/exec";
-
-// 更新情報API URL
 const UPDATE_API_URL = "https://script.google.com/macros/s/AKfycby6ZroDYpfu5y52VrQ9nTNEEsrC6joYt49zdendeI2du1OtbwcUfz7nAlGMgQeFV5iX/exec";
-
-// いまのメニュー版
 const CURRENT_MENU_VERSION = "v2.0.0";
 
-// 名前取得
 const params = new URLSearchParams(window.location.search);
-const empName = decodeURIComponent((params.get("name") || "").trim());
+const empName = (params.get("name") || "").trim();
 
-// ログイン表示
-const userBox = document.getElementById("userBox");
-if (empName) {
-  userBox.innerHTML = "<b>" + escapeHtml(empName) + "</b> さんでログイン中";
-} else {
-  userBox.innerHTML = "名前がありません";
-}
-
-// HTMLエスケープ
 function escapeHtml(text) {
   return String(text || '')
     .replace(/&/g, "&amp;")
@@ -286,7 +241,17 @@ function escapeHtml(text) {
     .replace(/'/g, "&#039;");
 }
 
-// 名前を付ける
+function renderUserName() {
+  const box = document.getElementById("userBox");
+  if (!box) return;
+
+  if (empName) {
+    box.innerHTML = "<b>" + escapeHtml(empName) + "</b> さんでログイン中";
+  } else {
+    box.textContent = "名前がありません";
+  }
+}
+
 function appendName(url) {
   let result = url;
   if (empName) {
@@ -295,7 +260,6 @@ function appendName(url) {
   return result;
 }
 
-// 共通遷移
 function move(url) {
   if (!url) {
     alert("URLが設定されていません。");
@@ -311,7 +275,7 @@ function goChat(){ move(CHAT_URL); }
 function goCar(){ move(CAR_URL); }
 function goUse(){ move(USE_URL); }
 function goSchedule(){ move(SCHEDULE_URL); }
-function goPropertyViewer(){ move(VIEW
+function goPropertyViewer(){ move(VIEWER_URL); }
 
 function goHome(){
   let url = location.origin + location.pathname;
@@ -333,12 +297,10 @@ function copyForm(){
   alert("コピーしました！");
 }
 
-// バージョン比較
 function normalizeVersion(v) {
   return String(v || "").trim().toLowerCase();
 }
 
-// 更新通知
 async function checkUpdateInfo() {
   try {
     const res = await fetch(UPDATE_API_URL + "?t=" + Date.now(), { cache: "no-store" });
@@ -383,6 +345,7 @@ async function checkUpdateInfo() {
 }
 
 window.addEventListener("load", function() {
+  renderUserName();
   checkUpdateInfo();
 });
 </script>
