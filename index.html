@@ -265,13 +265,15 @@ const UPDATE_API_URL = "https://script.google.com/macros/s/AKfycby6ZroDYpfu5y52V
 const CURRENT_MENU_VERSION = "v2.0.0";
 
 // 名前取得
-const params = new URLSearchParams(location.search);
-const empName = params.get("name");
+const params = new URLSearchParams(window.location.search);
+const empName = decodeURIComponent((params.get("name") || "").trim());
 
 // ログイン表示
+const userBox = document.getElementById("userBox");
 if (empName) {
-  document.getElementById("userBox").innerHTML =
-    "<b>" + escapeHtml(empName) + "</b> さんでログイン中";
+  userBox.innerHTML = "<b>" + escapeHtml(empName) + "</b> さんでログイン中";
+} else {
+  userBox.innerHTML = "名前がありません";
 }
 
 // HTMLエスケープ
