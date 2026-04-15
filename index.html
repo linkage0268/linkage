@@ -74,6 +74,7 @@ body{
 .viewer{ background:linear-gradient(180deg,#14b8a6,#0f766e); }
 .car{ background:linear-gradient(180deg,#0ea5e9,#0369a1); }
 .use{ background:linear-gradient(135deg,#36d1dc,#5b86e5); }
+.schedule{ background:linear-gradient(180deg,#7c3aed,#5b21b6); }
 .admin{ background:linear-gradient(180deg,#64748b,#334155); }
 
 /* 下固定メニュー */
@@ -197,6 +198,7 @@ body{
 
 <button class="btn car" onclick="goCar()">🚘 車両管理</button>
 <button class="btn use" onclick="goUse()">🚚 車両使用管理</button>
+<button class="btn schedule" onclick="goSchedule()">📅 スケジュール</button>
 <button class="btn property" onclick="goProperty()">🏠 物件写真管理</button>
 <button class="btn chat" onclick="goChat()">💬 社内チャット</button>
 <button class="btn viewer" onclick="goPropertyViewer()">🔍 物件検索</button>
@@ -249,6 +251,9 @@ const CHAT_URL = "https://script.google.com/macros/s/AKfycbzY--b0L9LzJ7PCjO1POgA
 const CAR_URL = "https://script.google.com/macros/s/AKfycbxLzeCa7O5_Yg5ZaVQZF8K-2OlGXeT5gmGwEe4ZlTLrEGYOYJUWzYvylgJ1U0PHXikO-g/exec";
 const VIEWER_URL = "https://script.google.com/macros/s/AKfycbxvP86tyS2YsIwAO6YgZsUIXF9H7wx40q7D6BqNSf8R6UZYl6fkWTHa1WkFj-OskSUp5Q/exec?mode=viewer";
 const USE_URL = "https://script.google.com/macros/s/AKfycbxQev0GXTduIpwVv3fS4dIHnYBKtBZEdh0iRsq9lE2Li_AktExOdkGPuzQBKHR3M9AdOA/exec";
+
+/* ★ スケジュールURLを追加 */
+const SCHEDULE_URL = "https://script.google.com/macros/s/あなたのスケジュールGASのURL/exec";
 
 // 管理画面URL
 const ADMIN_URL = "https://script.google.com/macros/s/AKfycbzP7LxDGpT9WC01Ppa1-sfqD63nhoGOR-B9N5aTti8Lt4m0eGmlpg_ba02ebps_XmY1/exec";
@@ -303,7 +308,8 @@ function goProperty(){ move(PROPERTY_URL); }
 function goChat(){ move(CHAT_URL); }
 function goCar(){ move(CAR_URL); }
 function goUse(){ move(USE_URL); }
-function goPropertyViewer(){ move(VIEWER_URL); }
+function goSchedule(){ move(SCHEDULE_URL); }
+function goPropertyViewer(){ move(VIEW
 
 function goHome(){
   let url = location.origin + location.pathname;
