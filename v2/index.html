@@ -332,6 +332,10 @@ function normalizeVersion(v) {
   return String(v || "").trim().toLowerCase();
 }
 
+function getSeenUpdateKey(version) {
+  return "linkage_seen_update_" + normalizeVersion(version || "");
+}
+  
 // ===== 安全な更新先URL取得 =====
 function resolveMenuUrl(rawUrl) {
   const url = String(rawUrl || "").trim();
