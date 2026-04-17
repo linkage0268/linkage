@@ -65,6 +65,7 @@ body{
   display:block;
 }
 
+/* ボタンカラー */
 .alcohol{ background:linear-gradient(180deg,#3b82f6,#1d4ed8); }
 .form{ background:linear-gradient(180deg,#10b981,#047857); }
 .copy{ background:linear-gradient(180deg,#f59e0b,#b45309); }
@@ -75,6 +76,7 @@ body{
 .use{ background:linear-gradient(135deg,#36d1dc,#5b86e5); }
 .admin{ background:linear-gradient(180deg,#64748b,#334155); }
 
+/* 下固定メニュー */
 .bottomNav{
   position:fixed;
   bottom:0;
@@ -102,6 +104,7 @@ body{
   font-size:20px;
 }
 
+/* 更新通知 */
 .updateOverlay{
   position:fixed;
   inset:0;
@@ -224,6 +227,7 @@ body{
   </button>
 </div>
 
+<!-- 更新通知 -->
 <div class="updateOverlay" id="updateOverlay">
   <div class="updateCard">
     <div class="updateTitle" id="updateTitle">更新があります</div>
@@ -237,7 +241,7 @@ body{
 </div>
 
 <script>
-// ===== URL設定 =====
+// URL設定
 const ALCOHOL_URL = "https://script.google.com/macros/s/AKfycbwDCUgv8Q8iEH4xfTY8m6qzl7qwFKot_5_vvxNOJ6gxaXZsXda0dT9oXzgJKfvvdy049A/exec";
 const FORM_URL = "https://script.google.com/macros/s/AKfycbwIw3h--vBxXMP8AYzOyG51oITqv6WKYm2T41nxFY1qsbkZo8dOnwfgKrF-FPARfCI7/exec";
 const PROPERTY_URL = "https://script.google.com/macros/s/AKfycbxvP86tyS2YsIwAO6YgZsUIXF9H7wx40q7D6BqNSf8R6UZYl6fkWTHa1WkFj-OskSUp5Q/exec";
@@ -245,29 +249,30 @@ const CHAT_URL = "https://script.google.com/macros/s/AKfycbzY--b0L9LzJ7PCjO1POgA
 const CAR_URL = "https://script.google.com/macros/s/AKfycbxLzeCa7O5_Yg5ZaVQZF8K-2OlGXeT5gmGwEe4ZlTLrEGYOYJUWzYvylgJ1U0PHXikO-g/exec";
 const VIEWER_URL = "https://script.google.com/macros/s/AKfycbxvP86tyS2YsIwAO6YgZsUIXF9H7wx40q7D6BqNSf8R6UZYl6fkWTHa1WkFj-OskSUp5Q/exec?mode=viewer";
 const USE_URL = "https://script.google.com/macros/s/AKfycbwER2h4Hj63H1AIjuMfdJjRkSFFtnVrOkFQLvqdnpBpcWvS5wD9kTedODGNIncEtH6lAw/exec";
+
+// 管理画面URL
 const ADMIN_URL = "https://script.google.com/macros/s/AKfycbwPVrSIoLFoszAKhoVuiomlLlzUiALyg0AFHfU23MvfCIc02aGC7_cXkjlqzlm9sEqjjg/exec";
 
-// ===== 更新情報API =====
+// 更新情報API URL
 const UPDATE_API_URL = "https://script.google.com/macros/s/AKfycby6ZroDYpfu5y52VrQ9nTNEEsrC6joYt49zdendeI2du1OtbwcUfz7nAlGMgQeFV5iX/exec";
 
-// ===== 固定の更新先URL =====
-// new_url が空や不正でも、ここへ飛ばす
+// 固定の更新先URL
 const DEFAULT_MENU_URL = "https://linkage0268.github.io/linkage/v2/";
 
-// ===== いまのメニュー版 =====
+// いまのメニュー版
 const CURRENT_MENU_VERSION = "v2.0.1";
 
-// ===== 名前取得 =====
+// 名前取得
 const params = new URLSearchParams(location.search);
 const empName = (params.get("name") || "").trim();
 
-// ===== ログイン表示 =====
+// ログイン表示
 if (empName) {
   document.getElementById("userBox").innerHTML =
     "<b>" + escapeHtml(empName) + "</b> さんでログイン中";
 }
 
-// ===== HTMLエスケープ =====
+// HTMLエスケープ
 function escapeHtml(text) {
   return String(text || '')
     .replace(/&/g, "&amp;")
@@ -277,7 +282,7 @@ function escapeHtml(text) {
     .replace(/'/g, "&#039;");
 }
 
-// ===== 名前付きURL生成 =====
+// 名前を付ける
 function appendName(url) {
   let result = String(url || "").trim();
   if (!result) return result;
@@ -288,7 +293,7 @@ function appendName(url) {
   return result;
 }
 
-// ===== キャッシュ避け付きURL生成 =====
+// キャッシュ回避
 function appendTimestamp(url) {
   let result = String(url || "").trim();
   if (!result) return result;
@@ -296,7 +301,7 @@ function appendTimestamp(url) {
   return result;
 }
 
-// ===== 共通遷移 =====
+// 共通遷移
 function move(url) {
   const base = String(url || "").trim();
   if (!base) {
@@ -327,16 +332,17 @@ function copyForm(){
   alert("コピーしました！");
 }
 
-// ===== バージョン比較用 =====
+// バージョン比較
 function normalizeVersion(v) {
   return String(v || "").trim().toLowerCase();
 }
 
+// 同じ版の通知を見たかどうか
 function getSeenUpdateKey(version) {
   return "linkage_seen_update_" + normalizeVersion(version || "");
 }
-  
-// ===== 安全な更新先URL取得 =====
+
+// 安全な更新先URL取得
 function resolveMenuUrl(rawUrl) {
   const url = String(rawUrl || "").trim();
   if (!url) return DEFAULT_MENU_URL;
@@ -350,7 +356,7 @@ function resolveMenuUrl(rawUrl) {
   }
 }
 
-// ===== 更新通知 =====
+// 更新通知
 async function checkUpdateInfo() {
   try {
     const res = await fetch(UPDATE_API_URL + "?t=" + Date.now(), { cache: "no-store" });
@@ -368,7 +374,7 @@ async function checkUpdateInfo() {
     const seenKey = getSeenUpdateKey(newVersion);
     const alreadySeen = localStorage.getItem(seenKey) === "1";
 
-    // 強制更新でないときは、同じ版の通知は1回だけ
+    // 強制更新でなければ、同じ版の通知は1回だけ
     if (!forceUpdate && alreadySeen) return;
 
     document.getElementById("updateTitle").textContent = data.title || "更新があります";
