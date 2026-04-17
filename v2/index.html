@@ -362,7 +362,14 @@ async function checkUpdateInfo() {
     const currentVersion = normalizeVersion(CURRENT_MENU_VERSION);
 
     if (!updateOn) return;
-    if (newVersion && newVersion === currentVersion) return;
+    if (!newVersion) return;
+    if (newVersion === currentVersion) return;
+
+    const seenKey = getSeenUpdateKey(newVersion);
+    const alreadySeen = localStorage.getItem(seenKey) === "1";
+
+    // 強制更新でないときは、同じ版の通知は1回だけ
+    if (!forceUpdate && alreadySeen) return;
 
     document.getElementById("updateTitle").textContent = data.title || "更新があります";
     document.getElementById("updateVersion").textContent = data.version ? ("バージョン: " + data.version) : "";
@@ -370,6 +377,7 @@ async function checkUpdateInfo() {
 
     document.getElementById("updateGoBtn").onclick = function() {
       const targetUrl = resolveMenuUrl(data.new_url);
+      localStorage.setItem(seenKey, "1");
       location.href = appendTimestamp(appendName(targetUrl));
     };
 
@@ -380,6 +388,7 @@ async function checkUpdateInfo() {
     } else {
       laterBtn.style.display = "block";
       laterBtn.onclick = function() {
+        localStorage.setItem(seenKey, "1");
         document.getElementById("updateOverlay").style.display = "none";
       };
     }
