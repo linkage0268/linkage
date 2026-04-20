@@ -10,6 +10,9 @@
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Linkage">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 
 <style>
 body{
@@ -17,60 +20,160 @@ body{
   font-family:sans-serif;
   background:#eef3fb;
   text-align:center;
+  padding-bottom:80px;
 }
+
 .header{
-  padding:40px 20px 10px;
+  padding:30px 20px 10px;
 }
+
 .logo{
-  width:120px;
-  height:120px;
-  object-fit:contain;
-  display:block;
+  width:100px;
+  height:100px;
   margin:auto;
+  object-fit:contain;
 }
+
 .title{
-  font-size:36px;
+  font-size:32px;
   font-weight:bold;
-  margin-top:10px;
 }
+
 .sub{
   color:#666;
   margin-bottom:20px;
 }
+
 .nameBox{
   max-width:480px;
   margin:0 auto 15px;
-}
-.nameBox input{
-  width:100%;
-  padding:14px;
+  padding:10px;
+  background:#fff;
   border-radius:12px;
-  border:1px solid #ccc;
-  font-size:16px;
 }
+
 .btn{
-  width:100%;
+  width:90%;
   max-width:480px;
   margin:10px auto;
-  padding:16px;
+  padding:15px;
+  font-size:16px;
   border:none;
   border-radius:14px;
   color:#fff;
-  font-size:18px;
+  cursor:pointer;
+  display:block;
+}
+
+/* ボタンカラー */
+.alcohol{ background:linear-gradient(180deg,#3b82f6,#1d4ed8); }
+.form{ background:linear-gradient(180deg,#10b981,#047857); }
+.copy{ background:linear-gradient(180deg,#f59e0b,#b45309); }
+.property{ background:linear-gradient(180deg,#8b5cf6,#5b21b6); }
+.chat{ background:linear-gradient(180deg,#ec4899,#be185d); }
+.viewer{ background:linear-gradient(180deg,#14b8a6,#0f766e); }
+.car{ background:linear-gradient(180deg,#0ea5e9,#0369a1); }
+.use{ background:linear-gradient(135deg,#36d1dc,#5b86e5); }
+
+/* 下固定メニュー */
+.bottomNav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:60px;
+  background:#fff;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+  z-index:100;
+}
+
+.navBtn{
+  flex:1;
+  border:none;
+  background:none;
+  font-size:12px;
+  color:#333;
+}
+
+.navBtn span{
+  display:block;
+  font-size:20px;
+}
+
+/* 更新通知 */
+.updateOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  padding:20px;
+}
+
+.updateCard{
+  width:100%;
+  max-width:520px;
+  background:#fff;
+  border-radius:22px;
+  padding:22px 18px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.25);
+  text-align:left;
+}
+
+.updateTitle{
+  font-size:24px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.updateVersion{
+  font-size:14px;
+  color:#666;
+  margin-bottom:12px;
+}
+
+.updateMessage{
+  font-size:16px;
+  line-height:1.8;
+  color:#333;
+  white-space:pre-line;
+  margin-bottom:18px;
+}
+
+.updateButtons{
+  display:flex;
+  gap:10px;
+}
+
+.updateBtn{
+  flex:1;
+  min-height:50px;
+  border:none;
+  border-radius:12px;
+  font-size:17px;
   font-weight:bold;
   cursor:pointer;
 }
-.schedule{ background:#3b82f6; }
-.property{ background:#8b5cf6; }
-.car{ background:#0ea5e9; }
-.use{ background:#22c55e; }
-.chat{ background:#ec4899; }
-.alcohol{ background:#ef4444; }
 
-.footer{
-  margin-top:30px;
-  font-size:12px;
-  color:#888;
+.updatePrimary{
+  background:linear-gradient(180deg,#2f6df6,#2457c9);
+  color:#fff;
+}
+
+.updateSecondary{
+  background:#e5e7eb;
+  color:#111;
+}
+
+@media (max-width: 600px){
+  .updateButtons{
+    flex-direction:column;
+  }
 }
 </style>
 </head>
@@ -78,47 +181,225 @@ body{
 <body>
 
 <div class="header">
-  <img src="icon.png" class="logo">
+  <img src="icon.png" class="logo" alt="Linkageロゴ">
   <div class="title">Linkage</div>
-  <div class="sub">メニューを選択してください</div>
+  <div class="sub">メニュー</div>
 </div>
 
-<div class="nameBox">
-  <input id="nameInput" placeholder="名前を入力（例：猪俣）">
+<div class="nameBox" id="userBox">
+  ログイン中
 </div>
 
-<button class="btn schedule" onclick="go('schedule')">スケジュール</button>
-<button class="btn property" onclick="go('property')">物件写真</button>
-<button class="btn car" onclick="go('car')">車両管理</button>
-<button class="btn use" onclick="go('use')">車両使用</button>
-<button class="btn alcohol" onclick="go('alcohol')">アルコールチェック</button>
-<button class="btn chat" onclick="go('chat')">社内チャット</button>
+<button class="btn alcohol" onclick="goAlcohol()">🚗 アルコールチェック</button>
+<button class="btn form" onclick="goForm()">📄 応募フォームを開く</button>
+<button class="btn copy" onclick="copyForm()">🔗 URLコピー</button>
 
-<!-- ❌ 管理画面ボタンは削除済み -->
+<button class="btn car" onclick="goCar()">🚘 車両管理</button>
+<button class="btn use" onclick="goUse()">🚚 車両使用管理</button>
+<button class="btn property" onclick="goProperty()">🏠 物件写真管理</button>
+<button class="btn chat" onclick="goChat()">💬 社内チャット</button>
+<button class="btn viewer" onclick="goPropertyViewer()">🔍 物件検索</button>
 
-<div class="footer">
-  © Linkage System
+<div class="bottomNav">
+  <button class="navBtn" onclick="goHome()">
+    <span>🏠</span>
+    ホーム
+  </button>
+
+  <button class="navBtn" onclick="goCar()">
+    <span>🚘</span>
+    車両
+  </button>
+
+  <button class="navBtn" onclick="goUse()">
+    <span>🚚</span>
+    使用
+  </button>
+
+  <button class="navBtn" onclick="goChat()">
+    <span>💬</span>
+    チャット
+  </button>
+</div>
+
+<!-- 更新通知 -->
+<div class="updateOverlay" id="updateOverlay">
+  <div class="updateCard">
+    <div class="updateTitle" id="updateTitle">更新があります</div>
+    <div class="updateVersion" id="updateVersion"></div>
+    <div class="updateMessage" id="updateMessage"></div>
+    <div class="updateButtons">
+      <button class="updateBtn updatePrimary" id="updateGoBtn">更新する</button>
+      <button class="updateBtn updateSecondary" id="updateLaterBtn">あとで</button>
+    </div>
+  </div>
 </div>
 
 <script>
-const GAS_BASE = "https://script.google.com/macros/s/AKfycbyR-9Vi268srranmelK9R_M6YNd9Z4PVdpXsHHx9t5bIe-Oi2CremPu6NAZ4p117mvk4w/exec";
+// URL設定
+const ALCOHOL_URL = "https://script.google.com/macros/s/AKfycbwDCUgv8Q8iEH4xfTY8m6qzl7qwFKot_5_vvxNOJ6gxaXZsXda0dT9oXzgJKfvvdy049A/exec";
+const FORM_URL = "https://script.google.com/macros/s/AKfycbwIw3h--vBxXMP8AYzOyG51oITqv6WKYm2T41nxFY1qsbkZo8dOnwfgKrF-FPARfCI7/exec";
+const PROPERTY_URL = "https://script.google.com/macros/s/AKfycbxvP86tyS2YsIwAO6YgZsUIXF9H7wx40q7D6BqNSf8R6UZYl6fkWTHa1WkFj-OskSUp5Q/exec";
+const CHAT_URL = "https://script.google.com/macros/s/AKfycbzY--b0L9LzJ7PCjO1POgAh2coeUanrpzk_1WaHNzFQCr80S8BZU07Wu_Y2-VeV4Ee8RA/exec";
+const CAR_URL = "https://script.google.com/macros/s/AKfycbxLzeCa7O5_Yg5ZaVQZF8K-2OlGXeT5gmGwEe4ZlTLrEGYOYJUWzYvylgJ1U0PHXikO-g/exec";
+const VIEWER_URL = "https://script.google.com/macros/s/AKfycbxvP86tyS2YsIwAO6YgZsUIXF9H7wx40q7D6BqNSf8R6UZYl6fkWTHa1WkFj-OskSUp5Q/exec?mode=viewer";
+const USE_URL = "https://script.google.com/macros/s/AKfycbwER2h4Hj63H1AIjuMfdJjRkSFFtnVrOkFQLvqdnpBpcWvS5wD9kTedODGNIncEtH6lAw/exec";
 
-function getName(){
-  let name = document.getElementById('nameInput').value.trim();
-  if(!name){
-    alert('名前を入力してください');
-    return null;
+// 更新情報API URL
+const UPDATE_API_URL = "https://script.google.com/macros/s/AKfycby6ZroDYpfu5y52VrQ9nTNEEsrC6joYt49zdendeI2du1OtbwcUfz7nAlGMgQeFV5iX/exec";
+
+// 固定の更新先URL
+const DEFAULT_MENU_URL = "https://linkage0268.github.io/linkage/v2/";
+
+// いまのメニュー版
+const CURRENT_MENU_VERSION = "v2.0.2";
+
+// 名前取得
+const params = new URLSearchParams(location.search);
+const empName = (params.get("name") || "").trim();
+
+// ログイン表示
+if (empName) {
+  document.getElementById("userBox").innerHTML =
+    "<b>" + escapeHtml(empName) + "</b> さんでログイン中";
+} else {
+  document.getElementById("userBox").textContent = "名前未入力";
+}
+
+// HTMLエスケープ
+function escapeHtml(text) {
+  return String(text || '')
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// 名前を付ける
+function appendName(url) {
+  let result = String(url || "").trim();
+  if (!result) return result;
+
+  if (empName) {
+    result += (result.includes("?") ? "&" : "?") + "name=" + encodeURIComponent(empName);
   }
-  return name;
+  return result;
 }
 
-function go(mode){
-  const name = getName();
-  if(!name) return;
-
-  const url = GAS_BASE + "?mode=" + mode + "&name=" + encodeURIComponent(name) + "&t=" + Date.now();
-  location.href = url;
+// キャッシュ回避
+function appendTimestamp(url) {
+  let result = String(url || "").trim();
+  if (!result) return result;
+  result += (result.includes("?") ? "&" : "?") + "t=" + Date.now();
+  return result;
 }
+
+// 共通遷移
+function move(url) {
+  const base = String(url || "").trim();
+  if (!base) {
+    alert("URLが設定されていません。");
+    return;
+  }
+  location.href = appendTimestamp(appendName(base));
+}
+
+function goAlcohol(){ move(ALCOHOL_URL); }
+function goForm(){ move(FORM_URL); }
+function goProperty(){ move(PROPERTY_URL); }
+function goChat(){ move(CHAT_URL); }
+function goCar(){ move(CAR_URL); }
+function goUse(){ move(USE_URL); }
+function goPropertyViewer(){ move(VIEWER_URL); }
+
+function goHome(){
+  move(DEFAULT_MENU_URL);
+}
+
+function copyForm(){
+  navigator.clipboard.writeText(FORM_URL);
+  alert("コピーしました！");
+}
+
+// バージョン比較
+function normalizeVersion(v) {
+  return String(v || "").trim().toLowerCase();
+}
+
+// 同じ版の通知を見たかどうか
+function getSeenUpdateKey(version) {
+  return "linkage_seen_update_" + normalizeVersion(version || "");
+}
+
+// 名前引き継ぎ付き更新URL
+function buildUpdatedUrl(newUrl) {
+  let url = String(newUrl || "").trim();
+
+  if (!url) {
+    url = DEFAULT_MENU_URL;
+  }
+
+  if (empName) {
+    url += (url.includes("?") ? "&" : "?") + "name=" + encodeURIComponent(empName);
+  }
+
+  url += (url.includes("?") ? "&" : "?") + "t=" + Date.now();
+
+  return url;
+}
+
+// 更新通知
+async function checkUpdateInfo() {
+  try {
+    const res = await fetch(UPDATE_API_URL + "?t=" + Date.now(), { cache: "no-store" });
+    const data = await res.json();
+
+    const updateOn = data.update_on === true || String(data.update_on).toLowerCase() === "true";
+    const forceUpdate = data.force_update === true || String(data.force_update).toLowerCase() === "true";
+    const newVersion = normalizeVersion(data.version);
+    const currentVersion = normalizeVersion(CURRENT_MENU_VERSION);
+
+    if (!updateOn) return;
+    if (!newVersion) return;
+    if (newVersion === currentVersion) return;
+
+    const seenKey = getSeenUpdateKey(newVersion);
+    const alreadySeen = localStorage.getItem(seenKey) === "1";
+
+    if (!forceUpdate && alreadySeen) return;
+
+    document.getElementById("updateTitle").textContent = data.title || "更新があります";
+    document.getElementById("updateVersion").textContent = data.version ? ("バージョン: " + data.version) : "";
+    document.getElementById("updateMessage").textContent = data.message || "最新版へ更新してください。";
+
+    document.getElementById("updateGoBtn").onclick = function() {
+      localStorage.setItem(seenKey, "1");
+      const targetUrl = buildUpdatedUrl(data.new_url);
+      location.href = targetUrl;
+    };
+
+    const laterBtn = document.getElementById("updateLaterBtn");
+    if (forceUpdate) {
+      laterBtn.style.display = "none";
+      document.body.style.overflow = "hidden";
+    } else {
+      laterBtn.style.display = "block";
+      laterBtn.onclick = function() {
+        localStorage.setItem(seenKey, "1");
+        document.getElementById("updateOverlay").style.display = "none";
+      };
+    }
+
+    document.getElementById("updateOverlay").style.display = "flex";
+  } catch (e) {
+    console.log("更新情報の取得失敗", e);
+  }
+}
+
+window.addEventListener("load", function() {
+  checkUpdateInfo();
+});
 </script>
 
 </body>
