@@ -1,127 +1,125 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Linkage</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Linkage</title>
 
-  <link rel="apple-touch-icon" href="icon.png">
-  <link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
 
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Linkage">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Linkage">
 
-  <style>
-    body{
-      margin:0;
-      font-family:sans-serif;
-      background:#eef3fb;
-      color:#111827;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      text-align:center;
-    }
-    .card{
-      width:100%;
-      max-width:420px;
-      background:#fff;
-      border-radius:22px;
-      padding:28px 20px;
-      box-shadow:0 12px 30px rgba(0,0,0,0.10);
-    }
-    .title{
-      font-size:30px;
-      font-weight:bold;
-      margin-bottom:10px;
-    }
-    .sub{
-      color:#6b7280;
-      line-height:1.8;
-      margin-bottom:20px;
-    }
-    .spinner{
-      width:54px;
-      height:54px;
-      margin:0 auto 18px;
-      border:5px solid #dbeafe;
-      border-top:5px solid #2563eb;
-      border-radius:50%;
-      animation:spin 0.9s linear infinite;
-    }
-    .btn{
-      width:100%;
-      border:none;
-      border-radius:14px;
-      padding:14px;
-      font-size:16px;
-      font-weight:bold;
-      color:#fff;
-      background:linear-gradient(180deg,#2f6df6,#2457c9);
-      cursor:pointer;
-    }
-    .note{
-      margin-top:12px;
-      font-size:12px;
-      color:#6b7280;
-      line-height:1.7;
-    }
-    @keyframes spin{
-      from{ transform:rotate(0deg); }
-      to{ transform:rotate(360deg); }
-    }
-  </style>
+<style>
+body{
+  margin:0;
+  font-family:sans-serif;
+  background:#eef3fb;
+  text-align:center;
+}
+.header{
+  padding:40px 20px 10px;
+}
+.logo{
+  width:120px;
+  height:120px;
+  object-fit:contain;
+  display:block;
+  margin:auto;
+}
+.title{
+  font-size:36px;
+  font-weight:bold;
+  margin-top:10px;
+}
+.sub{
+  color:#666;
+  margin-bottom:20px;
+}
+.nameBox{
+  max-width:480px;
+  margin:0 auto 15px;
+}
+.nameBox input{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #ccc;
+  font-size:16px;
+}
+.btn{
+  width:100%;
+  max-width:480px;
+  margin:10px auto;
+  padding:16px;
+  border:none;
+  border-radius:14px;
+  color:#fff;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.schedule{ background:#3b82f6; }
+.property{ background:#8b5cf6; }
+.car{ background:#0ea5e9; }
+.use{ background:#22c55e; }
+.chat{ background:#ec4899; }
+.alcohol{ background:#ef4444; }
+
+.footer{
+  margin-top:30px;
+  font-size:12px;
+  color:#888;
+}
+</style>
 </head>
+
 <body>
-  <div class="card">
-    <div class="title">Linkage</div>
-    <div class="sub">メニューへ移動しています。</div>
-    <div class="spinner"></div>
-    <button class="btn" onclick="moveToMenu()">開かない場合はこちら</button>
-    <div class="note" id="nameInfo"></div>
-  </div>
 
-  <script>
-    // ★ここに、新しく作った GASメニュー の /exec URL を入れてください
-    const MENU_GAS_URL = "https://script.google.com/macros/s/AKfycbyR-9Vi268srranmelK9R_M6YNd9Z4PVdpXsHHx9t5bIe-Oi2CremPu6NAZ4p117mvk4w/exec";
+<div class="header">
+  <img src="icon.png" class="logo">
+  <div class="title">Linkage</div>
+  <div class="sub">メニューを選択してください</div>
+</div>
 
-    const params = new URLSearchParams(location.search);
-    const empName = (params.get("name") || "").trim();
+<div class="nameBox">
+  <input id="nameInput" placeholder="名前を入力（例：猪俣）">
+</div>
 
-    if (empName) {
-      document.getElementById("nameInfo").textContent = empName + " さんで移動します。";
-    }
+<button class="btn schedule" onclick="go('schedule')">スケジュール</button>
+<button class="btn property" onclick="go('property')">物件写真</button>
+<button class="btn car" onclick="go('car')">車両管理</button>
+<button class="btn use" onclick="go('use')">車両使用</button>
+<button class="btn alcohol" onclick="go('alcohol')">アルコールチェック</button>
+<button class="btn chat" onclick="go('chat')">社内チャット</button>
 
-    function buildMenuUrl() {
-      let url = String(MENU_GAS_URL || "").trim();
+<!-- ❌ 管理画面ボタンは削除済み -->
 
-      if (!url) {
-        alert("MENU_GAS_URL が設定されていません。");
-        return "";
-      }
+<div class="footer">
+  © Linkage System
+</div>
 
-      if (empName) {
-        url += (url.includes("?") ? "&" : "?") + "name=" + encodeURIComponent(empName);
-      }
+<script>
+const GAS_BASE = "https://script.google.com/macros/s/AKfycbyR-9Vi268srranmelK9R_M6YNd9Z4PVdpXsHHx9t5bIe-Oi2CremPu6NAZ4p117mvk4w/exec";
 
-      url += (url.includes("?") ? "&" : "?") + "t=" + Date.now();
-      return url;
-    }
+function getName(){
+  let name = document.getElementById('nameInput').value.trim();
+  if(!name){
+    alert('名前を入力してください');
+    return null;
+  }
+  return name;
+}
 
-    function moveToMenu() {
-      const url = buildMenuUrl();
-      if (!url) return;
-      location.replace(url);
-    }
+function go(mode){
+  const name = getName();
+  if(!name) return;
 
-    window.addEventListener("load", function() {
-      setTimeout(moveToMenu, 200);
-    });
-  </script>
+  const url = GAS_BASE + "?mode=" + mode + "&name=" + encodeURIComponent(name) + "&t=" + Date.now();
+  location.href = url;
+}
+</script>
+
 </body>
 </html>
