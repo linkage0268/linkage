@@ -340,6 +340,11 @@ function buildUpdatedUrl(newUrl) {
     url = DEFAULT_MENU_URL;
   }
 
+  // /v2/ で終わっていたら index.html に補正
+  if (url.endsWith("/v2/")) {
+    url += "index.html";
+  }
+
   if (empName) {
     url += (url.includes("?") ? "&" : "?") + "name=" + encodeURIComponent(empName);
   }
@@ -360,38 +365,48 @@ async function checkUpdateInfo() {
     const newVersion = normalizeVersion(data.version);
     const currentVersion = normalizeVersion(CURRENT_MENU_VERSION);
 
+    // 更新OFFなら何もしない
     if (!updateOn) return;
-    if (!newVersion) return;
-    if (newVersion === currentVersion) return;
+
+    // バージョン未設定 or 同じなら何もしない
+    if (!newVersion || newVersion === currentVersion) return;
 
     const seenKey = getSeenUpdateKey(newVersion);
     const alreadySeen = localStorage.getItem(seenKey) === "1";
 
+    // 強制じゃなくて既に見ていたら出さない
     if (!forceUpdate && alreadySeen) return;
 
-    document.getElementById("updateTitle").textContent = data.title || "更新があります";
-    document.getElementById("updateVersion").textContent = data.version ? ("バージョン: " + data.version) : "";
-    document.getElementById("updateMessage").textContent = data.message || "最新版へ更新してください。";
+    document.getElementById("updateTitle").textContent =
+      data.title || "更新があります";
 
-    document.getElementById("updateGoBtn").onclick = function() {
+    document.getElementById("updateVersion").textContent =
+      data.version ? ("バージョン: " + data.version) : "";
+
+    document.getElementById("updateMessage").textContent =
+      data.message || "最新版へ更新してください。";
+
+    document.getElementById("updateGoBtn").onclick = function () {
       localStorage.setItem(seenKey, "1");
       const targetUrl = buildUpdatedUrl(data.new_url);
       location.href = targetUrl;
     };
 
     const laterBtn = document.getElementById("updateLaterBtn");
+
     if (forceUpdate) {
       laterBtn.style.display = "none";
       document.body.style.overflow = "hidden";
     } else {
       laterBtn.style.display = "block";
-      laterBtn.onclick = function() {
+      laterBtn.onclick = function () {
         localStorage.setItem(seenKey, "1");
         document.getElementById("updateOverlay").style.display = "none";
       };
     }
 
     document.getElementById("updateOverlay").style.display = "flex";
+
   } catch (e) {
     console.log("更新情報の取得失敗", e);
   }
