@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -74,6 +75,8 @@ body{
 .viewer{ background:linear-gradient(180deg,#14b8a6,#0f766e); }
 .car{ background:linear-gradient(180deg,#0ea5e9,#0369a1); }
 .use{ background:linear-gradient(135deg,#36d1dc,#5b86e5); }
+.schedule{ background:linear-gradient(180deg,#2563eb,#1d4ed8); }
+.admin{ background:linear-gradient(180deg,#64748b,#334155); }
 
 /* 下固定メニュー */
 .bottomNav{
@@ -190,6 +193,7 @@ body{
   ログイン中
 </div>
 
+<button class="btn schedule" onclick="goSchedule()">📅 スケジュール</button>
 <button class="btn alcohol" onclick="goAlcohol()">🚗 アルコールチェック</button>
 <button class="btn form" onclick="goForm()">📄 応募フォームを開く</button>
 <button class="btn copy" onclick="copyForm()">🔗 URLコピー</button>
@@ -199,11 +203,17 @@ body{
 <button class="btn property" onclick="goProperty()">🏠 物件写真管理</button>
 <button class="btn chat" onclick="goChat()">💬 社内チャット</button>
 <button class="btn viewer" onclick="goPropertyViewer()">🔍 物件検索</button>
+<button class="btn admin" onclick="goAdmin()">⚙️ 管理画面</button>
 
 <div class="bottomNav">
   <button class="navBtn" onclick="goHome()">
     <span>🏠</span>
     ホーム
+  </button>
+
+  <button class="navBtn" onclick="goSchedule()">
+    <span>📅</span>
+    予定
   </button>
 
   <button class="navBtn" onclick="goCar()">
@@ -214,11 +224,6 @@ body{
   <button class="navBtn" onclick="goUse()">
     <span>🚚</span>
     使用
-  </button>
-
-  <button class="navBtn" onclick="goChat()">
-    <span>💬</span>
-    チャット
   </button>
 </div>
 
@@ -237,13 +242,15 @@ body{
 
 <script>
 // URL設定
+const SCHEDULE_URL = "ここにスケジュールのGAS URL";
 const ALCOHOL_URL = "https://script.google.com/macros/s/AKfycbwDCUgv8Q8iEH4xfTY8m6qzl7qwFKot_5_vvxNOJ6gxaXZsXda0dT9oXzgJKfvvdy049A/exec";
 const FORM_URL = "https://script.google.com/macros/s/AKfycbwIw3h--vBxXMP8AYzOyG51oITqv6WKYm2T41nxFY1qsbkZo8dOnwfgKrF-FPARfCI7/exec";
 const PROPERTY_URL = "https://script.google.com/macros/s/AKfycbxvP86tyS2YsIwAO6YgZsUIXF9H7wx40q7D6BqNSf8R6UZYl6fkWTHa1WkFj-OskSUp5Q/exec";
-const CHAT_URL = "https://script.google.com/macros/s/AKfycbzY--b0L9LzJ7PCjO1POgAh2coeUanrpzk_1WaHNzFQCr80S8BZU07Wu_Y2-VeV4Ee8RA/exec";
+const CHAT_URL = "ここに社内チャットのGAS URL";
 const CAR_URL = "https://script.google.com/macros/s/AKfycbxLzeCa7O5_Yg5ZaVQZF8K-2OlGXeT5gmGwEe4ZlTLrEGYOYJUWzYvylgJ1U0PHXikO-g/exec";
 const VIEWER_URL = "https://script.google.com/macros/s/AKfycbxvP86tyS2YsIwAO6YgZsUIXF9H7wx40q7D6BqNSf8R6UZYl6fkWTHa1WkFj-OskSUp5Q/exec?mode=viewer";
 const USE_URL = "https://script.google.com/macros/s/AKfycbwER2h4Hj63H1AIjuMfdJjRkSFFtnVrOkFQLvqdnpBpcWvS5wD9kTedODGNIncEtH6lAw/exec";
+const ADMIN_URL = "https://script.google.com/macros/s/AKfycbwPVrSIoLFoszAKhoVuiomlLlzUiALyg0AFHfU23MvfCIc02aGC7_cXkjlqzlm9sEqjjg/exec";
 
 // 更新情報API URL
 const UPDATE_API_URL = "https://script.google.com/macros/s/AKfycby6ZroDYpfu5y52VrQ9nTNEEsrC6joYt49zdendeI2du1OtbwcUfz7nAlGMgQeFV5iX/exec";
@@ -305,6 +312,7 @@ function move(url) {
   location.href = appendTimestamp(appendName(base));
 }
 
+function goSchedule(){ move(SCHEDULE_URL); }
 function goAlcohol(){ move(ALCOHOL_URL); }
 function goForm(){ move(FORM_URL); }
 function goProperty(){ move(PROPERTY_URL); }
@@ -312,6 +320,7 @@ function goChat(){ move(CHAT_URL); }
 function goCar(){ move(CAR_URL); }
 function goUse(){ move(USE_URL); }
 function goPropertyViewer(){ move(VIEWER_URL); }
+function goAdmin(){ move(ADMIN_URL); }
 
 function goHome(){
   move(DEFAULT_MENU_URL);
@@ -340,7 +349,6 @@ function buildUpdatedUrl(newUrl) {
     url = DEFAULT_MENU_URL;
   }
 
-  // /v2/ で終わっていたら index.html に補正
   if (url.endsWith("/v2/")) {
     url += "index.html";
   }
@@ -365,16 +373,12 @@ async function checkUpdateInfo() {
     const newVersion = normalizeVersion(data.version);
     const currentVersion = normalizeVersion(CURRENT_MENU_VERSION);
 
-    // 更新OFFなら何もしない
     if (!updateOn) return;
-
-    // バージョン未設定 or 同じなら何もしない
     if (!newVersion || newVersion === currentVersion) return;
 
     const seenKey = getSeenUpdateKey(newVersion);
     const alreadySeen = localStorage.getItem(seenKey) === "1";
 
-    // 強制じゃなくて既に見ていたら出さない
     if (!forceUpdate && alreadySeen) return;
 
     document.getElementById("updateTitle").textContent =
@@ -419,3 +423,4 @@ window.addEventListener("load", function() {
 
 </body>
 </html>
+```
